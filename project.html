@@ -389,13 +389,14 @@
     .flowers {
       position: relative;
       transform: scale(0.8);
+      z-index: 11;
     }
     
     .flower {
       position: absolute;
       bottom: 10vmin;
       transform-origin: bottom center;
-      z-index: 1;
+      z-index: 10;
       --fl-speed: 0.1s;
     }
     .flower--1 {
@@ -1344,8 +1345,9 @@
     .heart {
       position: absolute;
       transform: rotate(-45deg);
-      background: #e74d3ca0;
-      opacity: 0.5;
+      background: #ff1900;
+      z-index: 1;
+      transition: top 0.2s ease, left 0.2s ease;
     }
     
     .heart::before,
@@ -1354,86 +1356,88 @@
       content: "";
       width: 100%;
       height: 100%;
-      background: #e74d3c8f;
+      background: red;
       border-radius: 50%;
+      z-index: 1;
     }
     
     .heart::before {
-      top: -50%;
+      top: -70%;
       left: 0;
     }
     .heart::after {
       top: 0;
-      right: -50%;
+      right: -70%;
     }
     </style>
     
-    <script>
+      <script>
         onload = () => {
-    const c = setTimeout(() => {
-      document.body.classList.remove("not-loaded");
-      clearTimeout(c);
-    }, 1000);
-  };
-
-  
-var num = 10;
-
-var w = window.innerWidth;
-var h = window.innerHeight;
-
-var velx = [];
-var vely = [];
-
-estructurar()
-
-function estructurar() {
-  for(i=0;i<num;i++){
-    //Crear corazon
-    let heart = document.createElement("DIV");
-    heart.className = "heart";
-    document.body.appendChild(heart);
-    //Asignar tamaño       
-    let tam = Math.floor((Math.random() * 25) + 20);
-    heart.style.width = tam+"px"
-    heart.style.height = tam+"px"
-    //Asignar posicion inicial
-    let posy = Math.floor((Math.random() * 0.1*h) + 0.8*h);
-    heart.style.top = posy+"px"
-    let posx = Math.floor((Math.random() * 0.8*w) + 0.1*h);
-    heart.style.left = posx+"px"
-    //Crear vector direccion y id
-    heart.id = "h"+i
-    vely[i] = Math.floor((Math.random() * 5) - 10);
-    velx[i] = Math.floor((Math.random() * 10) - 5);
-    //Asignar evento
-    heart.setAttribute("onclick","eliminar(this)")
-  }
-}
-
-setInterval(function(){ move() },60);
-
-function move(){
-  for(i=0;i<num;i++){
-    //Seleccion de corazon
-    let heart = document.getElementById("h"+i);
-    //Aumento de coordenadas
-    let y =  parseInt(heart.style.top) + vely[i];
-    let x =  parseInt(heart.style.left) + velx[i];
-    //Reinicio de coordenadas
-    if (x > 0.85*w) { x = 0.15*w;}
-    if (x < 0.15*w) { x = 0.85*w;}
-    if (y < 0.15*h) { y = 0.85*h;}
-    if (y > 0.85*h) { y = 0.15*w;}
-    //Asigmnacion de coordenadas
-    heart.style.top = y + "px";
-    heart.style.left = x + "px";
-  }
-}
-
-function eliminar(element){
-  element.style.display = "none";
-}
+            const c = setTimeout(() => {
+                document.body.classList.remove("not-loaded");
+                clearTimeout(c);
+            }, 1000);
+        };    
+    
+        var num = 15;
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+        var velx = [];
+        var vely = [];
+    
+        estructurar();
+    
+        function estructurar() {
+            for (let i = 0; i < num; i++) {
+                crearCorazon(i);
+            }
+        }
+    
+        function crearCorazon(index) {
+            let heart = document.createElement("DIV");
+            heart.className = "heart";
+            document.body.appendChild(heart);
+    
+            let tam = Math.floor((Math.random() * 10) + 15);
+            heart.style.width = tam + "px";
+            heart.style.height = tam + "px";
+    
+            let posy = Math.floor((Math.random() * 0.1 * h) + 0.9 * h);
+            let posx = Math.floor((Math.random() * 0.8 * w) + 0.2 * h);
+            heart.style.top = posy + "px";
+            heart.style.left = posx + "px";
+    
+            heart.id = "h" + index;
+            vely[index] = Math.floor((Math.random() * 5) - 10);
+            velx[index] = Math.floor((Math.random() * 10) - 5);
+    
+            heart.setAttribute("onclick", "eliminar(this)");
+        }
+    
+        setInterval(function () { move() }, 60);
+    
+        function move() {
+            for (let i = 0; i < num; i++) {
+                let heart = document.getElementById("h" + i);
+                if (heart) {
+                    let y = parseInt(heart.style.top) + vely[i];
+                    let x = parseInt(heart.style.left) + velx[i];
+    
+                  
+                    if (x > w || x < 0 || y > h || y < 0) {
+                        eliminar(heart); 
+                        crearCorazon(i); 
+                    } else {
+                        heart.style.top = y + "px";
+                        heart.style.left = x + "px";
+                    }
+                }
+            }
+        }
+    
+        function eliminar(element) {
+            element.remove(); 
+        }
     </script>
     
   </body>
